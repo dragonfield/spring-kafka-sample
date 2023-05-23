@@ -1,0 +1,15 @@
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+teams:
+  endpoint: http://localhost:28881
+  path: /webhookb2/IncomingWebhook
+  connectTimeout: 3000
+  readTimeout: 3000
+
