@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Unit Test
-        run: mvn clean test
+        run: mvn clean test sonar:sonar
         working-directory: ./spring-kafka-api
 
   integration-test:
