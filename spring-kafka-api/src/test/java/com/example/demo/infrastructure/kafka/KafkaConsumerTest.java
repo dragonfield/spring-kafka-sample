@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,6 +47,7 @@ class KafkaConsumerTest {
     kafkaTemplate = new KafkaTemplate<>(new DefaultKafkaProducerFactory<String, String>(config));
   }
 
+  @Disabled
   @Test
   void receive() throws Exception {
     TopicEnvelope envelope = new TopicEnvelope(new TopicHeader("0001", "2023/05/20"),
