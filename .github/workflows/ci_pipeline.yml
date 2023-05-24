@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Unit Test
-        run: mvn clean test sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=dragonfield -Dsonar.projectKey=dragonfield_spring-kafka-sample -Dsonar.login=1d3b912f9f569586084a1995c1cff1d54ab4d909
+        run: mvn clean test sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=dragonfield -Dsonar.projectKey=dragonfield_spring-kafka-sample -Dsonar.login=${{secrets.SONAR_LOGIN}}
 
   integration-test:
     runs-on: ubuntu-latest
