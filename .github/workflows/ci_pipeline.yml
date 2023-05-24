@@ -28,7 +28,6 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Unit Test
-        working-directory: ./spring-kafka-api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
