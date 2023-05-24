@@ -32,7 +32,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean test sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.projectKey=com.example_spring-kafka-sample
+        run: mvn clean test sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.projectKey=dragonfield_spring-kafka-sample
 
   integration-test:
     runs-on: ubuntu-latest
