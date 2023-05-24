@@ -52,7 +52,7 @@ class KafkaConsumerTest {
                                                new TopicBody("Hello World"));
     kafkaTemplate.send(TOPIC1, marshal(envelope));
 
-    await().atMost(10, SECONDS).untilAsserted(
+    await().pollDelay(1, SECONDS).atMost(10, SECONDS).untilAsserted(
             () -> verify(notificationUseCase)
                     .handle(new NotificationCommand("2023/05/20", "Hello World")));
   }
