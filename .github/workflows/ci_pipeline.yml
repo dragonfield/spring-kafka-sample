@@ -28,8 +28,11 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Unit Test
-        run: mvn clean test sonar:sonar
         working-directory: ./spring-kafka-api
+        run: mvn clean test sonar:sonar \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+          -Dsonar.login=${{ secrets.SONAR_LOGIN }}
 
   integration-test:
     runs-on: ubuntu-latest
@@ -54,12 +57,12 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build
-        run: mvn clean install -Dmaven.test.skip=true
         working-directory: ./spring-kafka-api
+        run: mvn clean install -Dmaven.test.skip=true
 
       - name: Integration Test
-        run: mvn clean verify
         working-directory: ./integration-test
+        run: mvn clean verify
 
       - name: Clean up Docker images
         if: always()
