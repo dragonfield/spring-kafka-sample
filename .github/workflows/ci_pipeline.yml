@@ -29,10 +29,7 @@ jobs:
 
       - name: Unit Test
         working-directory: ./spring-kafka-api
-        run: mvn clean test sonar:sonar \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
-          -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+        run: mvn clean test sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.login=${{ secrets.SONAR_LOGIN }}
 
   integration-test:
     runs-on: ubuntu-latest
