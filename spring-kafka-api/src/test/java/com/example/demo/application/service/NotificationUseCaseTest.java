@@ -11,27 +11,27 @@ import org.mockito.MockitoAnnotations;
 
 class NotificationUseCaseTest {
 
-    @InjectMocks
-    NotificationUseCase target;
+  @InjectMocks
+  NotificationUseCase target;
 
-    @Mock
-    TeamsClient teamsClient;
+  @Mock
+  TeamsClient teamsClient;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+  @BeforeEach
+  void setUp() {
+    MockitoAnnotations.openMocks(this);
+  }
 
-    @Test
-    void test_正常にTeams連携が実行できる場合() {
-        String timestamp = "2023/05/20";
-        String text = "Hello World";
+  @Test
+  void test_正常にTeams連携が実行できる場合() {
+    String timestamp = "2023/05/20";
+    String text = "Hello World";
 
-        target.handle(new NotificationCommand(timestamp, text));
+    target.handle(new NotificationCommand(timestamp, text));
 
-        verify(teamsClient)
-                .sendMessage("Notification",
-                             String.format("timestamp: %s text: %s", timestamp, text));
-    }
+    verify(teamsClient)
+            .sendMessage("Notification",
+                         String.format("timestamp: %s text: %s", timestamp, text));
+  }
 
 }
