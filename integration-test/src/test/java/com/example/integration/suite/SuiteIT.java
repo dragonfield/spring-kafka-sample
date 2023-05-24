@@ -47,7 +47,7 @@ class SuiteIT {
             }
             """);
 
-    await().atMost(5, SECONDS).untilAsserted(
+    await().pollDelay(1, SECONDS).atMost(5, SECONDS).untilAsserted(
             () -> verify(postRequestedFor(urlEqualTo("/webhookb2/IncomingWebhook"))
                     .withHeader("Content-Type", equalTo("application/json"))
                     .withRequestBody(equalToJson("""

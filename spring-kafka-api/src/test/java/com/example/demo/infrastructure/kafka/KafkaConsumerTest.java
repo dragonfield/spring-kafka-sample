@@ -8,42 +8,60 @@ import com.example.demo.application.service.NotificationCommand;
 import com.example.demo.application.service.NotificationUseCase;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
+import java.util.List;
+import java.util.Properties;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
-import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
+@Testcontainers
 @SpringBootTest
-@DirtiesContext
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
 class KafkaConsumerTest {
 
-  @Autowired
-  EmbeddedKafkaBroker broker;
+  @Container
+  static final KafkaContainer kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka"));
+
+  @DynamicPropertySource
+  static void kafkaProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
+    registry.add("spring.kafka.producer.bootstrap-servers", kafkaContainer::getBootstrapServers);
+    registry.add("spring.kafka.consumer.bootstrap-servers", kafkaContainer::getBootstrapServers);
+    registry.add("spring.kafka.consumer.auto-offset-reset", () -> "earliest");
+  }
 
   @MockBean
   NotificationUseCase notificationUseCase;
 
-  private KafkaTemplate<String, String> kafkaTemplate;
+  @Autowired
+  KafkaTemplate<String, String> kafkaTemplate;
+
+  AdminClient adminClient;
 
   private static final String TOPIC1 = "my-topic";
 
   @BeforeEach
   void setUp() {
-    Map<String, Object> config = KafkaTestUtils.producerProps(broker);
-    config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-    config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-    kafkaTemplate = new KafkaTemplate<>(new DefaultKafkaProducerFactory<String, String>(config));
+    Properties properties = new Properties();
+    properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers());
+    adminClient = AdminClient.create(properties);
+  }
+
+  @AfterEach
+  void tearDown() throws Exception {
+    adminClient.deleteTopics(List.of(TOPIC1));
+    adminClient.close();
   }
 
   @Test
