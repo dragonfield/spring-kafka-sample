@@ -37,8 +37,8 @@ public class TeamsClientImpl implements TeamsClient {
     try {
       ResponseEntity<String> result
               = restTemplate.postForEntity(teamsConfig.getEndpoint() + teamsConfig.getPath(),
-              new MessageCard(title, message),
-              String.class);
+                                           new MessageCard(title, message),
+                                           String.class);
 
     } catch (RestClientResponseException e) {
       if (HttpStatus.BAD_REQUEST.value() == e.getRawStatusCode()) {

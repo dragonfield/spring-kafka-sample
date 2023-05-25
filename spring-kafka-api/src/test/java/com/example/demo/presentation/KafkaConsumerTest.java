@@ -1,13 +1,12 @@
-package com.example.demo.infrastructure.kafka;
+package com.example.demo.presentation;
 
+import static com.example.demo.common.utils.JsonUtils.marshalToJson;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.*;
 import static org.mockito.Mockito.*;
 
 import com.example.demo.application.service.NotificationCommand;
 import com.example.demo.application.service.NotificationUseCase;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Properties;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -65,23 +64,15 @@ class KafkaConsumerTest {
   }
 
   @Test
-  void receive() throws Exception {
+  void 適切にコンシュームしたメッセージを処理できる場合() throws Exception {
     TopicEnvelope envelope = new TopicEnvelope(new TopicHeader("0001", "2023/05/20"),
                                                new TopicBody("Hello World"));
-    kafkaTemplate.send(TOPIC1, marshal(envelope));
+
+    kafkaTemplate.send(TOPIC1, marshalToJson(envelope));
 
     await().pollDelay(1, SECONDS).atMost(10, SECONDS).untilAsserted(
             () -> verify(notificationUseCase)
                     .handle(new NotificationCommand("2023/05/20", "Hello World")));
-  }
-
-  private String marshal(TopicEnvelope envelope) {
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      return mapper.writeValueAsString(envelope);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
   }
 
 }

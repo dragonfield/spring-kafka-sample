@@ -23,7 +23,7 @@ class NotificationUseCaseTest {
   }
 
   @Test
-  void test_正常にTeams連携が実行できる場合() {
+  void 正常にTeams連携が実行できる場合() {
     String timestamp = "2023/05/20";
     String text = "Hello World";
 
