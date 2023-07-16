@@ -9,6 +9,16 @@ management:
             - readinessState
 
 spring:
+  datasource:
+    platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/sample
+    username: user
+    password: pass
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 5
   kafka:
     consumer:
       bootstrap-servers: broker:29092
@@ -23,3 +33,11 @@ teams:
   connectTimeout: 30000
   readTimeout: 30000
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+togglz:
+  features:
+    NEW_PRODUCT:
+      enabled: false

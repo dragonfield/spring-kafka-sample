@@ -16,4 +16,7 @@ public class TopicHeader {
   @JsonProperty("timestamp")
   private String timestamp;
 
+  @JsonProperty("importance")
+  private Boolean importance;
+
 }

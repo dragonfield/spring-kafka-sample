@@ -7,7 +7,11 @@ import lombok.Data;
 @AllArgsConstructor
 public class NotificationCommand {
 
+  private String id;
+
   private String timestamp;
+
+  private Boolean importance;
 
   private String text;
 

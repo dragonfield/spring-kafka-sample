@@ -1,4 +1,14 @@
 spring:
+  datasource:
+    platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/sample
+    username: user
+    password: pass
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 5
   kafka:
     consumer:
       bootstrap-servers: localhost:9092
@@ -13,3 +23,6 @@ teams:
   connectTimeout: 3000
   readTimeout: 3000
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

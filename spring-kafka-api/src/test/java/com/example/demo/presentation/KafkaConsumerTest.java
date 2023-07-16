@@ -65,14 +65,17 @@ class KafkaConsumerTest {
 
   @Test
   void 適切にコンシュームしたメッセージを処理できる場合() throws Exception {
-    TopicEnvelope envelope = new TopicEnvelope(new TopicHeader("0001", "2023/05/20"),
+    // setup
+    TopicEnvelope envelope = new TopicEnvelope(new TopicHeader("0001", "2023/05/20", true),
                                                new TopicBody("Hello World"));
 
+    // execute
     kafkaTemplate.send(TOPIC1, marshalToJson(envelope));
 
+    // assert
     await().pollDelay(1, SECONDS).atMost(10, SECONDS).untilAsserted(
             () -> verify(notificationUseCase)
-                    .handle(new NotificationCommand("2023/05/20", "Hello World")));
+                    .handle(new NotificationCommand("0001", "2023/05/20", true, "Hello World")));
   }
 
 }

@@ -16,4 +16,5 @@ import org.junit.platform.suite.api.Suite;
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.example.acceptance.steps")
 @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "not @Developing")
 public class RunCucumberTest {
+
 }

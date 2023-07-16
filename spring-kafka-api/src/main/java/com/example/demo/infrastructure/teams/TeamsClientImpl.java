@@ -4,7 +4,7 @@ import com.example.demo.application.teams.TeamsClient;
 import com.example.demo.common.exception.ApplicationException;
 import com.example.demo.common.exception.SystemException;
 import java.time.Duration;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;

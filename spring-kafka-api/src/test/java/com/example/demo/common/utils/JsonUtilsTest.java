@@ -12,7 +12,7 @@ class JsonUtilsTest {
   @Test
   void 適切にオブジェクトをJSONにマーシャルできる場合() {
     // setup
-    TopicEnvelope envelope = new TopicEnvelope(new TopicHeader("0001", "2023/05/20"),
+    TopicEnvelope envelope = new TopicEnvelope(new TopicHeader("0001", "2023/05/20", true),
                                                new TopicBody("Hello World."));
 
     // execute
@@ -23,7 +23,8 @@ class JsonUtilsTest {
             {
               "header" : {
                 "id" : "0001",
-                "timestamp" : "2023/05/20"
+                "timestamp" : "2023/05/20",
+                "importance" : true
               },
               "body" : {
                 "text" : "Hello World."
@@ -39,7 +40,8 @@ class JsonUtilsTest {
             {
               "header" : {
                 "id" : "0001",
-                "timestamp" : "2023/05/20"
+                "timestamp" : "2023/05/20",
+                "importance" : true
               },
               "body" : {
                 "text" : "Hello World."
@@ -50,7 +52,7 @@ class JsonUtilsTest {
     TopicEnvelope actual = JsonUtils.unmarshalFromJson(json, TopicEnvelope.class);
 
     // assert
-    TopicEnvelope expected = new TopicEnvelope(new TopicHeader("0001", "2023/05/20"),
+    TopicEnvelope expected = new TopicEnvelope(new TopicHeader("0001", "2023/05/20", true),
                                                new TopicBody("Hello World."));
     assertThat(actual).isEqualTo(expected);
   }

@@ -38,8 +38,9 @@ public class MyStepdefs {
     template.send("my-topic", """
             {
                 "header" : {
-                    "id" : "0001",
-                    "timestamp" : "2023/05/20"
+                    "id" : "101",
+                    "timestamp" : "2023/05/20",
+                    "importance" : true
                 },
                 "body" : {
                     "text" : "Hello World"
@@ -57,7 +58,7 @@ public class MyStepdefs {
                     .withRequestBody(equalToJson("""
                             {
                               "title": "Notification",
-                              "text": "timestamp: 2023/05/20 text: Hello World"
+                              "text": "timestamp: 2023/05/20 text: Hi, Taro Hello World"
                             }
                             """, true, true))));
   }

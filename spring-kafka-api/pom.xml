@@ -21,14 +21,18 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
-    <spring.boot.version>2.7.12</spring.boot.version>
-    <wiremock.version>2.35.0</wiremock.version>
-    <testcontainers.version>1.18.1</testcontainers.version>
+    <spring.boot.version>3.1.0</spring.boot.version>
+    <mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
+    <togglz-spring-boot-starter.version>4.0.1</togglz-spring-boot-starter.version>
+    <wiremock.version>3.0.0-beta-10</wiremock.version>
+    <testcontainers.version>1.18.3</testcontainers.version>
+    <database-rider.version>1.37.1</database-rider.version>
     <awaitility.version>4.2.0</awaitility.version>
 
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>3.1.0</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
     <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+    <flyway-maven-plugin.version>9.20.0</flyway-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -60,9 +64,20 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter</artifactId>
+      <version>${mybatis-spring-boot-starter.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka</artifactId>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.togglz</groupId>
+      <artifactId>togglz-spring-boot-starter</artifactId>
+      <version>${togglz-spring-boot-starter.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -73,6 +88,11 @@
     <!-- ============================ -->
     <!-- Runtime Scoped Dependencies  -->
     <!-- ============================ -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
     <!-- ============================ -->
     <!-- Provided Scoped Dependencies -->
@@ -93,13 +113,25 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter-test</artifactId>
+      <version>${mybatis-spring-boot-starter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.togglz</groupId>
+      <artifactId>togglz-junit</artifactId>
+      <version>${togglz-spring-boot-starter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock-jre8</artifactId>
+      <artifactId>wiremock</artifactId>
       <version>${wiremock.version}</version>
       <scope>test</scope>
     </dependency>
@@ -110,7 +142,18 @@
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
       <artifactId>kafka</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.database-rider</groupId>
+      <artifactId>rider-junit5</artifactId>
+      <version>${database-rider.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -185,6 +228,26 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+        <version>${flyway-maven-plugin.version}</version>
+      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>local</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <flyway.user>user</flyway.user>
+        <flyway.password>pass</flyway.password>
+        <flyway.url>jdbc:postgresql://localhost:5432/sample</flyway.url>
+      </properties>
+    </profile>
+  </profiles>
 </project>

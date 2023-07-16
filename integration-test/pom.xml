@@ -21,12 +21,15 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
 
-        <spring.boot.version>2.7.12</spring.boot.version>
-        <wiremock.version>2.35.0</wiremock.version>
+        <spring.boot.version>3.1.0</spring.boot.version>
+        <mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
+        <wiremock.version>3.0.0-beta-10</wiremock.version>
+        <database-rider.version>1.37.1</database-rider.version>
         <awaitility.version>4.2.0</awaitility.version>
 
         <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
         <docker-compose-maven-plugin.version>1.0.0</docker-compose-maven-plugin.version>
+        <flyway-maven-plugin.version>9.20.0</flyway-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -55,10 +58,20 @@
             <artifactId>spring-kafka</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- ============================ -->
         <!-- Runtime Scoped Dependencies  -->
         <!-- ============================ -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- ============================ -->
         <!-- Provided Scoped Dependencies -->
@@ -85,8 +98,14 @@
         </dependency>
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8</artifactId>
+            <artifactId>wiremock</artifactId>
             <version>${wiremock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.database-rider</groupId>
+            <artifactId>rider-junit5</artifactId>
+            <version>${database-rider.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -150,6 +169,74 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>local-integration-test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <flyway.url>jdbc:postgresql://localhost:5432/sample</flyway.url>
+                <flyway.user>user</flyway.user>
+                <flyway.password>pass</flyway.password>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemProperties>
+                                <property><name>database.url</name><value>jdbc:postgresql://localhost:5432/sample</value></property>
+                                <property><name>database.user</name><value>user</value></property>
+                                <property><name>database.password</name><value>pass</value></property>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>integration-test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <flyway.url>jdbc:postgresql://localhost:5432/sample</flyway.url>
+                <flyway.user>user</flyway.user>
+                <flyway.password>pass</flyway.password>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemProperties>
+                                <property><name>database.url</name><value>jdbc:postgresql://localhost:5432/sample</value></property>
+                                <property><name>database.user</name><value>user</value></property>
+                                <property><name>database.password</name><value>pass</value></property>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

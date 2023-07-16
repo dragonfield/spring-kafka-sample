@@ -1,0 +1,10 @@
+employees:
+  - id: "101"
+    first_name: "Taro"
+    last_name: "Yamada"
+  - id: "102"
+    first_name: "Jiro"
+    last_name: "Yamada"
+  - id: "103"
+    first_name: "Saburo"
+    last_name: "Yamada"

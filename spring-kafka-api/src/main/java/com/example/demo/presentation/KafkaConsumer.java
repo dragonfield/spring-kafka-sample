@@ -21,7 +21,10 @@ public class KafkaConsumer {
   public void consume(ConsumerRecord<String, String> consumerRecord) {
     log.debug("key: " + consumerRecord.key() + ", value: " + consumerRecord.value());
     TopicEnvelope envelope = unmarshalFromJson(consumerRecord.value(), TopicEnvelope.class);
-    NotificationCommand command = new NotificationCommand(envelope.header.getTimestamp(), envelope.getBody().getText());
+    NotificationCommand command = new NotificationCommand(envelope.getHeader().getId(),
+                                                          envelope.getHeader().getTimestamp(),
+                                                          envelope.getHeader().getImportance(),
+                                                          envelope.getBody().getText());
     notificationUseCase.handle(command);
   }
 
