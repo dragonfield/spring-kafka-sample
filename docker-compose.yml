@@ -16,7 +16,7 @@ services:
     networks:
       - my-nw
     environment:
-      TOGGLZ_FEATURES_NEW_PRODUCT_ENABLED: true
+      TOGGLZ_FEATURES_NEW_PRODUCT_ENABLED: "true"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     healthcheck:
