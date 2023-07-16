@@ -154,16 +154,8 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>pre-integration-test</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>up</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-integration-test</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
                             <goal>down</goal>
                         </goals>
                     </execution>
