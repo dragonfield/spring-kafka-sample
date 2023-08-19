@@ -19,7 +19,6 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-
 #      - name: Cache local Maven repository
 #        uses: actions/cache@v3
 #        with:
