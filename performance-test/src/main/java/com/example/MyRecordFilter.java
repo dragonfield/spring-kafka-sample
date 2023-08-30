@@ -15,20 +15,20 @@ public class MyRecordFilter implements RecordFilterStrategy<String, String> {
 
   private final ObjectMapper objectMappter;
 
-  @Override
-  public boolean filter(ConsumerRecord<String, String> consumerRecord) {
-    try {
-      MyRecord record = objectMappter.readValue(consumerRecord.value(), MyRecord.class);
-      log.info(record.getMessageStatus());
+    @Override
+    public boolean filter(ConsumerRecord<String, String> consumerRecord) {
+        try {
+            MyRecord record = objectMappter.readValue(consumerRecord.value(), MyRecord.class);
+            log.info(record.getMessageStatus());
 
-      if ("Accepted".equals(record.getMessageStatus())) {
-        return false;
-      }
+            if ("Accepted".equals(record.getMessageStatus())) {
+                return false;
+            }
 
-    } catch (JsonProcessingException e) {
-      log.warn("unmarshalling is failed.", e);
+        } catch (JsonProcessingException e) {
+            log.warn("unmarshalling is failed.", e);
+        }
+
+        return true;
     }
-
-    return true;
-  }
 }
