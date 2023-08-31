@@ -24,7 +24,6 @@ public class KafkaConsumer {
     public void consume(ConsumerRecord<String, String> consumerRecord) {
         log.debug("key: " + consumerRecord.key() + ", value: " + consumerRecord.value());
 
-
         ProducerRecord<String, String> record = new ProducerRecord<>("transfer", consumerRecord.value());
         record.headers().add("foo", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).getBytes());
         kafkaTemplate.send(record);

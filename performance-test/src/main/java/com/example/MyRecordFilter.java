@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyRecordFilter implements RecordFilterStrategy<String, String> {
 
-  private final ObjectMapper objectMappter;
+    private final ObjectMapper objectMappter;
 
     @Override
     public boolean filter(ConsumerRecord<String, String> consumerRecord) {
@@ -21,9 +21,7 @@ public class MyRecordFilter implements RecordFilterStrategy<String, String> {
             MyRecord record = objectMappter.readValue(consumerRecord.value(), MyRecord.class);
             log.info(record.getMessageStatus());
 
-            if ("Accepted".equals(record.getMessageStatus())) {
-                return false;
-            }
+            if ("Accepted".equals(record.getMessageStatus())) return false;
 
         } catch (JsonProcessingException e) {
             log.warn("unmarshalling is failed.", e);
